@@ -77,4 +77,30 @@ const updateProduct = async (req, res) => {
     }
 };
 
-module.exports = { addProduct, getAllProduct, updateProduct };
+
+const uploadFile = async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, message: 'File is required and must be a CSV or PDF.' });
+        const file = req.file;
+        // const fileUrl = `http://${process.env.HOST}:${process.env.PORT}/${file.filename}`;
+        const fileUrl = `/${file.filename}`;
+        return res.status(201).json({ success: true, message: 'File uploaded successfully.', data: { file: { originalname: file.originalname, filename: file.filename, mimetype: file.mimetype, size: file.size }, url: fileUrl } });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: 'Internal server error.' })
+    }
+}
+
+const uploadImages = async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, message: 'Image is required and must be jpeg , png' });
+       const file = req.file;
+       
+        const fileUrl = `/${file.filename}`;
+        return res.status(201).json({ success: true, message: 'Image uploaded successfully.', data: { file: { originalname: file.originalname, filename: file.filename, mimetype: file.mimetype, size: file.size }, url: fileUrl } });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: 'Internal server error.' })
+    }
+}
+module.exports = { addProduct, getAllProduct, updateProduct, uploadImages, uploadFile };
